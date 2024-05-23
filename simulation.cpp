@@ -11,9 +11,9 @@ using namespace cv;
 
 const int Nx = 400;                 //X-resolution
 const int Ny = 100;                 //Y-resolution
-const double rho0 = 40.0;           //Avg Density
-const double tau = 0.8;             //Collision Timescale
-const int Nt = 4000;                //Number of Timestep Interations
+const double rho0 = 20.0;           //Avg Density
+const double tau = 0.6;             //Collision Timescale
+const int Nt = 8000;                //Number of Timestep Interations
 
 const bool plotRealTime = true;     //Display vis
 const int visT = 10;                 //Timestep per vis
@@ -146,9 +146,12 @@ void visualize(const vector<vector<double>> &ux, const vector<vector<double>> &u
     normalizedVorticityImg *= 255;
     normalizedVorticityImg.convertTo(normalizedVorticityImg, CV_8UC1);
 
+
     //Apply color map
     Mat colorMappedImg;
-    applyColorMap(normalizedVorticityImg, colorMappedImg, COLORMAP_JET);
+    applyColorMap(normalizedVorticityImg, colorMappedImg, COLORMAP_TURBO);
+
+
 
     //Set cylinder area to black
     for (int y = 0; y < Ny; ++y) {
@@ -181,7 +184,6 @@ int main() {
     for (const auto& entry : filesystem::directory_iterator(folderName)) {
         filesystem::remove(entry.path());
     }
-
 
     filesystem::create_directories(folderName);
     //Lattice velocities and weights
