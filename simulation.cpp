@@ -8,12 +8,13 @@
 using namespace std;
 using namespace cv;
 
-const int Nx = 400;
-const int Ny = 100;
-const double rho0 = 100.0;
-const double tau = 0.6;
-const int Nt = 4000;
-const bool plotRealTime = true;
+const int Nx = 400;                 //X-resolution
+const int Ny = 100;                 //Y-resolution
+const double rho0 = 40.0;           //Avg Density
+const double tau = 0.6;            //Collision Timescale
+const int Nt = 4000;                //Number of Timestep Interations
+const bool plotRealTime = true;     //Display vis
+const int visT = 1;                //Timestep per vis
 
 void initialize(vector<vector<vector<double>>> &F, vector<double> &cxs, vector<double> &cys, vector<double> &weights) {
     random_device rd;
@@ -32,7 +33,9 @@ void initialize(vector<vector<vector<double>>> &F, vector<double> &cxs, vector<d
     }
 }
 
-void calculateRhoUxUy(const vector<vector<vector<double>>> &F, vector<vector<double>> &rho, vector<vector<double>> &ux, vector<vector<double>> &uy, const vector<double> &cxs, const vector<double> &cys) {
+void calculateRhoUxUy(const vector<vector<vector<double>>> &F, vector<vector<double>> &rho, vector<vector<double>> &ux,
+    vector<vector<double>> &uy, const vector<double> &cxs, const vector<double> &cys) {
+
     for (int y = 0; y < Ny; ++y) {
         for (int x = 0; x < Nx; ++x) {
             double sum_rho = 0.0;
@@ -50,7 +53,9 @@ void calculateRhoUxUy(const vector<vector<vector<double>>> &F, vector<vector<dou
     }
 }
 
-void applyCollision(vector<vector<vector<double>>> &F, const vector<vector<double>> &rho, const vector<vector<double>> &ux, const vector<vector<double>> &uy, const vector<double> &cxs, const vector<double> &cys, const vector<double> &weights) {
+void applyCollision(vector<vector<vector<double>>> &F, const vector<vector<double>> &rho, const vector<vector<double>> &ux,
+    const vector<vector<double>> &uy, const vector<double> &cxs, const vector<double> &cys, const vector<double> &weights) {
+
     for (int y = 0; y < Ny; ++y) {
         for (int x = 0; x < Nx; ++x) {
             for (int i = 0; i < 9; ++i) {
@@ -170,7 +175,7 @@ int main() {
 
         applyCollision(F, rho, ux, uy, cxs, cys, weights);
 
-        if (plotRealTime && (it % 1 == 0 || it == Nt - 1)) {
+        if (plotRealTime && (it % visT == 0 || it == Nt - 1)) {
             visualize(ux, uy, cylinder);
         }
     }
