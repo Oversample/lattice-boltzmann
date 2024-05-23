@@ -1,1 +1,3 @@
-# lattice-boltzmann
+# Lattice Boltzmann Fluid Simulation
+
+![](example.gif)
